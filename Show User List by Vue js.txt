@@ -1,0 +1,63 @@
+<div id="root">    
+	    <p class="errorMessage" v-if="errorMessage">
+                {{errorMessage}}
+            </p>
+
+            <p class="successMessage" v-if="successMessage">
+                {{successMessage}}
+            </p>
+
+            <table class="list">
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                <tr v-for="user in users">
+                    <td>{{user.id}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.mobile}}</td>
+                    <td><button @click="showingEditModal = true; selectUser(user)">Edit</button></td>
+                    <td><button @click="showingDeleteModal = true; selectUser(user)">Delete</button></td>
+                </tr>
+            </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+      
+<script>
+
+var app = new Vue({
+    el: "#root",
+    data: {
+        errorMessage: "",
+        successMessage: "",
+        users: [],
+    },
+
+    mounted: function() {
+        console.log("mounted");
+        this.getAllUsers();
+    },
+
+    methods: {
+        getAllUsers: function() {
+            axios.get("http://localhost/vuephpcrud/api.php?action=read")
+                .then(function(response) {
+                    if (response.data.error) {
+                        app.errorMessage = response.data.message;
+                    } else {
+                        app.users = response.data.users;
+                    }
+                });
+        },
+        
+    }
+});
+
+
+</script>

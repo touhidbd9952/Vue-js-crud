@@ -1,0 +1,99 @@
+<div id="root">    
+	    <p class="errorMessage" v-if="errorMessage">
+                {{errorMessage}}
+            </p>
+
+            <p class="successMessage" v-if="successMessage">
+                {{successMessage}}
+            </p>
+
+            <div class="modal" id="addModal" v-if="showingAddModal">
+            <div class="modalContainer">
+                <div class="modalHeading">
+                    <p class="fleft">Add New User</p>
+                    <button class="fright close" @click="showingAddModal = false;">x</button>
+                    <div class="clear"></div>
+                </div>
+                <div class="modalContent">
+                    <table class="form">
+                        <tr>
+                            <th>Username</th>
+                            <th> : </th>
+                            <td> <input type="text" name="" v-model="newUser.username"> </td>
+                        </tr>
+
+                        <tr>
+                            <th>Email</th>
+                            <th> : </th>
+                            <td> <input type="text" name="" v-model="newUser.email"> </td>
+                        </tr>
+
+                        <tr>
+                            <th>Mobile</th>
+                            <th> : </th>
+                            <td> <input type="text" name="" v-model="newUser.mobile"> </td>
+                        </tr>
+
+                        <tr>
+                            <th></th>
+                            <th> </th>
+                            <td> <button @click="showingAddModal = false; saveUser();">Save</button> </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+      
+<script>
+
+var app = new Vue({
+    el: "#root",
+    data: {
+        errorMessage: "",
+        successMessage: "",
+        newUser: { username: "", email: "", mobile: "" },
+    },
+
+    mounted: function() {
+        console.log("mounted");
+        this.getAllUsers();
+    },
+
+    methods: {
+        saveUser: function() {
+            //console.log(app.newUser);
+            var formData = app.toFormData(app.newUser);
+
+            axios.post("http://localhost/vuephpcrud/api.php?action=create", formData)
+                .then(function(response) {
+
+                    app.newUser = { username: "", email: "", mobile: "" };
+
+                    if (response.data.error) {
+                        app.errorMessage = response.data.message;
+                    } else {
+                        app.getAllUsers();
+                    }
+                });
+        },
+
+	toFormData: function(obj) {
+            var form_data = new FormData();
+            for (var key in obj) {
+                form_data.append(key, obj[key]);
+            }
+            return form_data;
+        },
+
+
+        
+    }
+});
+
+
+</script>

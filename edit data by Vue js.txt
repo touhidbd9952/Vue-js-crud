@@ -1,0 +1,79 @@
+<div id="root">    
+	    <p class="errorMessage" v-if="errorMessage">
+                {{errorMessage}}
+            </p>
+
+            <p class="successMessage" v-if="successMessage">
+                {{successMessage}}
+            </p>
+
+            <div class="modal" id="editModal" v-if="showingEditModal">
+            <div class="modalContainer">
+                <div class="modalHeading">
+                    <p class="fleft">Edit This User</p>
+                    <button class="fright close" @click="showingEditModal = false;">x</button>
+                    <div class="clear"></div>
+                </div>
+                <div class="modalContent">
+                    <table class="form">
+                        <tr>
+                            <th>Username</th>
+                            <th> : </th>
+                            <td> <input type="text" name="" v-model="clickedUser.username"> </td>
+                        </tr>
+
+                        <tr>
+                            <th>Email</th>
+                            <th> : </th>
+                            <td> <input type="text" name="" v-model="clickedUser.email"> </td>
+                        </tr>
+
+                        <tr>
+                            <th>Mobile</th>
+                            <th> : </th>
+                            <td> <input type="text" name="" v-model="clickedUser.mobile"> </td>
+                        </tr>
+
+                        <tr>
+                            <th></th>
+                            <th> </th>
+                            <td> <button @click="showingEditModal = false; updateUser()">Update</button> </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+      
+<script>
+
+var app = new Vue({
+    el: "#root",
+    data: {
+        errorMessage: "",
+        successMessage: "",
+        clickedUser: {},
+    },
+
+    mounted: function() {
+        console.log("mounted");
+        this.getAllUsers();
+    },
+
+    methods: {
+        selectUser(user) {
+            app.clickedUser = user;
+        },
+
+
+        
+    }
+});
+
+
+</script>
